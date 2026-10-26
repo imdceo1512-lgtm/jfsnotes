@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<title>Java Full Stack - Editable Handwritten Notebook (Pages 1-4)</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&amp;family=Kalam:wght@300;400;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink-dark: #1f2421;
+    --ink-blue: #16325c;
+    --ink-accent: #7a2021;
+    --line-color: #d4e0e8;
+    --margin-line: #e5989b;
+    --paper-bg: #fcfaf2;
+  }
+
+  body {
+    background-color: #333533;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 10px;
+    margin: 0;
+    font-family: 'Kalam', cursive;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 10px;
+    z-index: 1000;
+    background: #ffffff;
+    padding: 10px 22px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-family: sans-serif;
+    font-size: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .toolbar button {
+    background: #16325c;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .toolbar button:hover {
+    background: #254e8a;
+  }
+
+  .notebook-page {
+    width: 880px;
+    min-height: 1180px;
+    background-color: var(--paper-bg);
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      var(--line-color) 27px,
+      var(--line-color) 28px
+    );
+    background-size: 100% 28px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.5), inset 20px 0 30px rgba(0,0,0,0.04);
+    position: relative;
+    padding: 34px 38px 45px 78px;
+    box-sizing: border-box;
+    color: var(--ink-dark);
+    font-size: 17.5px;
+    line-height: 28px;
+    margin-bottom: 35px;
+    outline: none;
+  }
+
+  /* Red Vertical Margin Line */
+  .notebook-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 62px;
+    width: 2px;
+    background-color: var(--margin-line);
+  }
+
+  .page-num {
+    position: absolute;
+    top: 12px;
+    right: 25px;
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: #666;
+  }
+
+  .date-badge {
+    position: absolute;
+    left: 6px;
+    font-family: 'Caveat', cursive;
+    font-size: 19px;
+    font-weight: bold;
+    color: var(--ink-blue);
+    text-decoration: underline;
+    transform: rotate(-10deg);
+  }
+
+  .title-center {
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: underline;
+    color: var(--ink-blue);
+    margin: 8px 0 4px 0;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .hand-box {
+    border: 2px solid #444;
+    border-radius: 6px 12px 8px 14px / 12px 6px 14px 8px;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.55);
+    line-height: 24px;
+  }
+
+  .code-block {
+    font-family: 'Kalam', cursive;
+    color: var(--ink-blue);
+    white-space: pre-wrap;
+    margin: 0;
+  }
+
+  .indent-1 { padding-left: 28px; }
+  .indent-2 { padding-left: 56px; }
+  .indent-3 { padding-left: 84px; }
+
+  .underline { text-decoration: underline; }
+  .accent { color: var(--ink-accent); }
+
+  /* Mindmap / Features Hub */
+  .mindmap-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .mindmap-diagram {
+    position: relative;
+    width: 390px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mindmap-center {
+    border: 2px solid #333;
+    border-radius: 50%;
+    padding: 10px 18px;
+    text-align: center;
+    font-weight: bold;
+    background: #fffdf7;
+    line-height: 20px;
+  }
+
+  .mm-node {
+    position: absolute;
+    font-size: 15.5px;
+    line-height: 18px;
+    white-space: nowrap;
+  }
+
+  @media print {
+    body { background: none; padding: 0; }
+    .toolbar { display: none; }
+    .notebook-page {
+      box-shadow: none;
+      margin: 0;
+      width: 100%;
+      page-break-after: always;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span>✏️ <b>Editable Handwritten Notebook (4 Pages):</b> Click any word or diagram to edit.</span>
+  <button onclick="downloadHTML()">💾 Download Edited HTML</button>
+  <button onclick="window.print()">🖨️ Save as PDF / Print</button>
+</div>
+
+<!-- ==================== PAGE 1 ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 1</div>
+  <div class="date-badge" style="top: 38px;">1/6/2026</div>
+
+  <div class="title-center">ॐ<br>JAVA FULL STACK</div>
+
+  <div>
+    <b>Programming</b> → Making instructions for a computer to perform specific tasks.<br>
+    <span class="indent-2">↓</span><br>
+    <span class="indent-1">(Written in languages that a computer can understand) → <span class="underline"><b>Purpose</b></span> → To automate tasks, solve problems, or create systems and applications.</span>
+  </div>
+
+  <div class="row" style="margin-top: 8px;">
+    <div style="width: 74%;">
+      <b>High-Level Languages</b> → Closer to human languages.<br>
+      <span class="indent-2">(Java, Python) → Easy to read &amp; write.</span><br>
+      <b>Low-Level Languages</b> → Closer to machine languages.<br>
+      <span class="indent-2">(Assembly, Machine Code) → Hard to understand.</span><br>
+      <span class="indent-2"><b>Binary</b> → 0, 1 → Represents (off and on states).</span>
+    </div>
+    <div class="hand-box" style="width: 24%; text-align: center; font-size: 16px;">
+      ← <b>Translation Required</b> for execution<br>
+      ↓<br>
+      <span class="underline">Interpreter</span> ← <span class="underline">Compiler</span>
+    </div>
+  </div>
+
+  <!-- Date 2/6/2026 -->
+  <div style="position: relative; margin-top: 10px;">
+    <div class="date-badge" style="left: -72px; top: 0px;">2/6/2026</div>
+
+    <div class="row">
+      <!-- Compiler vs Interpreter Diagrams -->
+      <div style="width: 46%;">
+        <div class="row" style="align-items: center;">
+          <div class="hand-box" style="width: 110px;">
+            <b>Java</b><br>
+            1 }<br>
+            2 } 100 lines<br>
+            3 }<br>
+            .. 10
+          </div>
+          <div style="text-align: center;">
+            <span class="underline">Compiler</span><br>→→
+          </div>
+          <div class="hand-box" style="width: 110px;">
+            <b>Binary Code</b><br>
+            010100<br>
+            00100<br>
+            -- --
+          </div>
+        </div>
+
+        <div class="row" style="align-items: center; margin-top: 10px;">
+          <div class="hand-box" style="width: 110px;">
+            <b>Java</b><br>
+            1 →<br>
+            2 →<br>
+            3 → 10
+          </div>
+          <div style="text-align: center;">
+            <span class="underline">Interpreter</span><br>→→
+          </div>
+          <div class="hand-box" style="width: 110px;">
+            <b>Binary</b><br>
+            01..<br>
+            0...<br>
+            ..01
+          </div>
+        </div>
+      </div>
+
+      <!-- Explanation Right Side -->
+      <div style="width: 52%;">
+        <b><span class="underline">Compiler</span>:</b> Converts entire code in a single shot.<br>
+        <span class="indent-2 accent">↑ Faster execution.</span><br>
+        <b><span class="underline">Interpreter</span>:</b> Converts line by line.<br>
+        <span class="indent-2 accent">← Faster error handling.</span><br>
+        <div style="margin-top: 6px; padding-left: 10px;">
+          * Compiler will show all errors at once.<br>
+          * Interpreter will stop code after the first error.
+        </div>
+      </div>
+    </div>
+
+    <div class="indent-1" style="margin-top: 6px;">
+      <b>Compiler</b> → C &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} → <b>Java</b> ↓<br>
+      <b>Interpreter</b> → Python &nbsp;} → <b>Hybrid Language</b> (uses both Compiler &amp; Interpreter)
+    </div>
+  </div>
+
+  <!-- History of JAVA -->
+  <div class="section-title">⇒ History of JAVA</div>
+  <div style="position: relative;">
+    <div style="position: absolute; left: -68px; top: 35px; font-family: 'Caveat', cursive; font-size: 19px; line-height: 20px; text-align: center; transform: rotate(-18deg); color: var(--ink-accent);">
+      <b>James Gosling</b><br>↓<br>Father of JAVA
+    </div>
+
+    <div><b>1991</b> → Initiated by Sun Microsystems as the <b>Green Project</b>.<br>
+      <span class="indent-2">Initial name was <span class="underline"><b>OAK</b></span> ← Referred to a tree outside the lab (representing strength).</span>
+    </div>
+    <div><b>1995</b> → Java released: Renamed to <span class="underline"><b>JAVA</b></span> ← Refers to JAVA brand coffee.<br>
+      <span class="indent-2">Java 1.0 launched with "Write Once, Run Anywhere" philosophy.</span>
+    </div>
+    <div><b>2010</b> → <b>Oracle Acquisition</b>: Oracle acquired Sun Microsystems and took over JAVA.</div>
+    <div><b>2014</b> → <b>JAVA 8 Released</b>: Major changes happened in Java in this version.</div>
+    <div><b>2026</b> → <b>JAVA 26 Released</b>: New Java version released on March 17, 2026.</div>
+  </div>
+
+  <!-- Features of JAVA -->
+  <div class="section-title">Features of JAVA</div>
+  <div class="mindmap-wrapper">
+    <div style="width: 48%;">
+      • <b>Platform Independent</b> → WORA → Write Once Run Anywhere<br>
+      • <b>Object Oriented</b><br>
+      • <b>Strictly Typed Language</b><br>
+      • <b>Automatic Garbage Collection</b><br>
+      • <b>Robust &amp; Secure</b><br>
+      • <b>Secure</b>
+    </div>
+
+    <!-- Mindmap Diagram -->
+    <div class="mindmap-diagram">
+      <div class="mindmap-center">Features<br>of JAVA</div>
+      <div class="mm-node" style="top: 8px; left: 75px;">Multithreaded ↑</div>
+      <div class="mm-node" style="top: 2px; left: 190px;">↑ Distributed</div>
+      <div class="mm-node" style="top: 15px; right: 20px;">↗ Object Oriented</div>
+      <div class="mm-node" style="top: 48px; right: 15px;">→ <span class="underline">Simple</span></div>
+      <div class="mm-node" style="top: 78px; right: 10px;">→ Secured</div>
+      <div class="mm-node" style="top: 110px; right: 0px;">→ Platform Independent</div>
+      <div class="mm-node" style="bottom: 35px; right: 25px;">↘ Robust</div>
+      <div class="mm-node" style="bottom: 12px; right: 75px;">↘ Portable</div>
+      <div class="mm-node" style="bottom: 2px; left: 140px;">↓ Architecture Neutral</div>
+      <div class="mm-node" style="bottom: 18px; left: 65px;">↙ Dynamic</div>
+      <div class="mm-node" style="top: 120px; left: 10px;">← Interpreted</div>
+      <div class="mm-node" style="top: 65px; left: 5px;">High Performance</div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 2 ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 2</div>
+
+  <div class="section-title">Platform Independent → WORA → Write Once Run Anywhere</div>
+
+  <!-- C Compilation Diagram -->
+  <div class="row" style="align-items: center; justify-content: flex-start; gap: 25px; margin-top: 12px;">
+    <div style="text-align: center;">
+      <div class="hand-box" style="width: 110px; padding: 18px 10px;"><b>C-Code</b></div>
+      <div><b>.c</b></div>
+    </div>
+    <div style="text-align: center;">
+      <span class="underline">Compiler</span><br>→→
+    </div>
+    <div style="text-align: center;">
+      <div class="hand-box" style="width: 110px; padding: 14px 10px;"><b>Binary<br>Code</b></div>
+      <div><b>.exe</b> → executable code</div>
+    </div>
+    <div class="indent-1">
+      <b>C → is Platform Dependent</b>
+    </div>
+  </div>
+
+  <!-- Java Compilation Diagram -->
+  <div class="row" style="align-items: center; justify-content: flex-start; gap: 20px; margin-top: 18px;">
+    <div style="text-align: center;">
+      <div class="hand-box" style="width: 110px; padding: 18px 10px;"><b>Java</b></div>
+      <div><b>.java</b></div>
+    </div>
+    <div style="text-align: center;">
+      <span class="underline">Compiler</span><br>→→
+    </div>
+    <div style="text-align: center;">
+      <div class="hand-box" style="width: 110px; padding: 14px 10px;"><b>Byte<br>Code</b></div>
+      <div><b>.class</b></div>
+    </div>
+    <div style="text-align: center;">
+      <span style="font-size: 15px;">Java Virtual Machine</span><br>
+      <b>JVM</b> →→
+    </div>
+    <div style="text-align: center;">
+      <div class="hand-box" style="width: 110px; padding: 18px 10px;"><b>0 &nbsp; 1</b></div>
+      <div>(Machine Code)</div>
+    </div>
+  </div>
+
+  <div class="indent-3" style="margin-top: 4px;">&nbsp; ↓<br>
+    <b>(Can be used in any OS) → <span class="underline">Platform Independent</span></b>
+  </div>
+
+  <!-- Date 3/6/2026 -->
+  <div style="position: relative; margin-top: 18px;">
+    <div class="date-badge" style="left: -72px; top: 4px;">3/6/2026</div>
+
+    <div class="row">
+      <div>
+        <span class="underline"><b>OOP</b></span> → <b>Object Oriented Programming</b><br>
+        <span class="indent-2">(Class - Object)</span>
+      </div>
+      <div class="hand-box">
+        <b>C</b> → Procedural Language<br>
+        <b>Python</b> → OOP
+      </div>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <span class="underline"><b>Strictly Typed Language</b></span><br>
+      <span class="indent-1">→ Requires explicit declaration of variable types,</span><br>
+      <span class="indent-2">helping to catch type-related errors at compile time.</span>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <span class="underline"><b>Automatic Garbage Collection</b></span><br>
+      <span class="indent-1">→ Manages memory automatically by removing unused objects.</span>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <span class="underline"><b>Robust &amp; Secure</b></span><br>
+      <span class="indent-1">Java can handle errors gracefully and keeps running without crashing.</span><br>
+      <span class="indent-2">→ <b>Exception Handling</b></span>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <span class="underline"><b>Secure</b></span><br>
+      <span class="indent-1">• There are no pointers; you can't directly access memory.</span><br>
+      <span class="indent-1">• Byte Code Verifier → JVM</span>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <span class="underline"><b>Backward Compatibility</b></span><br>
+      <span class="indent-2"><b>Java 1 &nbsp; - - - - &gt; &nbsp; Java 26</b></span><br>
+      <span class="indent-2">←-----------------------------------← (Java 26 can still run Java 1 &amp; all previous versions)</span><br>
+      <div class="indent-3 accent" style="margin-top: 4px;">
+        (Python is <u>not</u> backward compatible)
+      </div>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <span class="underline"><b>Multi-threading</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3 ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 3</div>
+  <div class="date-badge" style="top: 38px;">4/6/2026</div>
+
+  <div class="row">
+    <div style="width: 62%;">
+      <span class="underline"><b>Compile</b></span> → High-Level Code → Low-Level Code / Intermediate Level Code<br>
+      <span class="indent-2">→ Checks for Syntax</span><br>
+      <span class="indent-2">→ Errors / Exceptions</span><br>
+      <span class="indent-2">→ Doesn't check the code logic</span>
+    </div>
+    <div class="hand-box" style="width: 35%;">
+      → <b>To compile:</b><br>
+      <code>javac &lt;filename&gt;.java</code>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 10px;">
+    <div style="width: 62%;">
+      <span class="underline"><b>Run / Execute</b></span> → Running Low-Level Code<br>
+      <span class="indent-2">→ Executing actual logic</span>
+    </div>
+    <div class="hand-box" style="width: 35%;">
+      → <b>To run:</b><br>
+      <code>java &lt;filename&gt;</code>
+    </div>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <span class="underline"><b>Java</b></span> → Program should be written in <b>'classes'</b> and should have <b>'main'</b> method.<br>
+    <span class="indent-1">→ Also need to save the file with <code>&lt;ClassName&gt;.java</code> (with same case).</span>
+  </div>
+
+  <!-- Code Structure 1 -->
+  <div class="row" style="margin-top: 10px;">
+    <div class="code-block" style="width: 38%;">
+* class Test {
+    public static void main(
+             String[] args)
+    {
+    }
+  }</div>
+    <div style="width: 60%;">
+      → <span class="underline">To Compile:</span> <code>javac Test.java</code> → Will create <code>.class</code> file (Byte Code) ↓ <b><code>Test.class</code></b><br>
+      → <span class="underline">To Run/Execute:</span> <code>java Test</code><br>
+      → Java execution starts from <b><code>main</code></b> method, so it's <b>Mandatory</b>.<br>
+      → Every instruction should end with <b>" <code>;</code> "</b>
+    </div>
+  </div>
+
+  <!-- Code Structure 2 (Hello World) -->
+  <div class="row" style="margin-top: 8px; align-items: center;">
+    <div class="code-block" style="width: 58%;">
+* class Test {
+    public static void main(String[] args) {
+        System.out.print("Hello World");
+    }
+  }</div>
+    <div style="width: 38%;">
+      → <b>Output:</b> <code>Hello World</code>
+    </div>
+  </div>
+
+  <!-- Interview Q&A -->
+  <div style="margin-top: 8px;">
+    → <b>Q: Can you <u>compile</u> Java code without 'main' method?</b><br>
+    <span class="indent-1"><b><span class="underline">Yes</span></b> → Because compile time checks only syntax.</span><br>
+    → <b>Q: Can you <u>run</u> Java code without 'main' method?</b><br>
+    <span class="indent-1"><b><span class="underline">No</span></b> → Execution starts with <code>main</code> method → so it will throw an error.</span>
+  </div>
+
+  <!-- JVM Flow -->
+  <div style="margin-top: 8px;">
+    <b>⇒ <span class="underline">JVM</span> (Java Virtual Machine):</b><br>
+    <span class="indent-1"><b>HL (High Level)</b> —(Compiler)→ <b>IL (Byte Code)</b> —(JVM)→ <b>LL (Low Level / Machine Code)</b></span>
+  </div>
+
+  <!-- Date 5/6/2026 -->
+  <div style="position: relative; margin-top: 10px;">
+    <div class="date-badge" style="left: -72px; top: 4px;">5/6/2026</div>
+
+    <div><b><span class="underline"><br></span></b></div><div>
+      <b><span class="underline">JDK</span> → Java Development Kit</b><br>
+      <span class="indent-1"><b>JDK = JRE + Development Tools</b> (<code>javac</code> [compiler], debugger, docgen)</span><br>
+      <span class="indent-2">↳ <b>Java Runtime Environment (JRE)</b></span><br>
+      <span class="indent-2"><b>JRE = JVM + Libraries</b> (<code>java.util</code>, <code>java.io</code>) → Predefined codes (<code>import</code>)</span>
+    </div>
+
+    <div style="margin-top: 6px;">
+      • <b>Dev</b> → Compile → <b>JDK</b> (Compiler)<br>
+      • <b>Client</b> → Run → <b>JRE</b> (to run &amp; display) — <i>(Complete JDK not required, as client won't compile)</i>
+    </div>
+
+    <div style="margin-top: 6px;">
+      <b><span class="underline">JVM</span> → Java Virtual Machine</b> → Executes Code<br>
+      <div class="row" style="margin-top: 4px;">
+        <div style="width: 48%;">
+          <b>① CLSS → Class Loader Sub-System:</b><br>
+          <span class="indent-1">• Loads the <code>.class</code> files into JVM</span><br>
+          <span class="indent-1">• Verifies <code>.class</code> files and their vulnerabilities</span><br>
+          <span class="indent-1">• Links the files</span><br><b>③ </b><b>Execution Engine:</b><br>
+          <span class="indent-1">(a) Interpreter &nbsp; (b) JIT Compiler &nbsp; (c) Garbage Collector</span>
+        </div>
+        <div style="width: 50%;"><b style="display: inline !important;">② </b><b>Memory Management:</b><br>
+          <span class="indent-1">(a) Method Area</span><br>
+          <span class="indent-1">(b) Heap Area</span><br>
+          <span class="indent-1">(c) Stack Area</span><br>
+          <span class="indent-1">(d) Program Counters (PC)</span><br>
+          <span class="indent-1">(e) Native Method Area</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4 ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 4</div>
+
+  <!-- 1. CLSS -->
+  <div>
+    <b>1. <span class="underline">CLSS</span> → Class Loader Sub-System</b><br>
+    <span class="indent-1">* Loads the <code>.class</code> files into JVM</span><br>
+    <span class="indent-1">* Verifies the <code>.class</code> files for vulnerabilities</span><br>
+    <span class="indent-1">* Links the files</span>
+  </div>
+
+  <!-- 2. Memory Management -->
+  <div style="margin-top: 10px;">
+    <b>2. <span class="underline">Memory Management</span></b><br>
+    <div class="indent-1">
+      <b>a. <span class="underline">Method Area</span>:</b><br>
+      <span class="indent-1">Stores: <code>static</code> variables, Class metadata, methods.</span><br>
+
+      <b>b. <span class="underline">Heap Area</span>:</b><br>
+      <span class="indent-1">Stores: Instance variables, Objects (references), <b>SCP → String Constant Pool</b>.</span><br>
+
+      <b>c. <span class="underline">Stack Area</span> → (Like temporary memory):</b><br>
+      <span class="indent-1">Stores: Local variables, Threads, Method execution.</span><br>
+
+      <b>d. <span class="underline">Program Counters (PC)</span>:</b><br>
+      <span class="indent-1">Holds the current and next instructions.</span><br>
+
+      <b>e. <span class="underline">Native Method Area</span>:</b><br>
+      <span class="indent-1">Used when we connect/communicate with different programming languages (e.g., JAVA → Python, C).</span><br>
+      <span class="indent-1">→ These instructions will be stored in the Native Method Area.</span>
+    </div>
+  </div>
+
+  <!-- 3. Execution Engine -->
+  <div style="margin-top: 10px;">
+    <b>3. <span class="underline">Execution Engine</span></b><br>
+    <div class="indent-1">
+      <b>a. <span class="underline">Interpreter</span>:</b><br>
+      <span class="indent-1"><code>.class</code> → Machine → Run (Line by line / instruction by instruction).</span><br>
+
+      <b>b. <span class="underline">JIT Compiler</span> → Just In Time Compiler:</b><br>
+      <span class="indent-1">↳ When we have repeated instructions / loops,</span><br>
+      <span class="indent-1">↳ JIT Compiler picks such code &amp; executes them in a single shot,</span><br>
+      <span class="indent-1">↳ Which reduces time (as Interpreter alone takes more time executing line by line).</span><br>
+      <span class="indent-1"><b>JIT Compiler + Interpreter → <span class="underline">Hybrid</span></b> (picks what should run how &amp; performs).</span><br>
+
+      <b>c. <span class="underline">Garbage Collector</span>:</b><br>
+      <span class="indent-1">Trashes / removes the unused references and variables.</span>
+    </div>
+  </div>
+
+  <!-- JDK / JRE / JVM Nested Box Diagram -->
+  <div class="hand-box" style="margin-top: 16px; padding: 14px; border-width: 2.5px;">
+    <div style="text-align: center; font-weight: bold; font-size: 20px;">JDK</div>
+    <div class="row" style="align-items: stretch; margin-top: 6px;">
+      <!-- JRE Box -->
+      <div class="hand-box" style="width: 68%; padding: 12px;">
+        <div style="text-align: center; font-weight: bold;">JRE</div>
+        <div class="row" style="margin-top: 6px;">
+          <!-- JVM Box -->
+          <div class="hand-box" style="width: 52%;">
+            <div style="font-weight: bold; text-decoration: underline;">JVM</div>
+            • Class Loader<br>
+            • Memory Areas<br>
+            • Execution Engine
+          </div>
+          <!-- Libraries Boxes -->
+          <div style="width: 44%; display: flex; flex-direction: column; gap: 8px;">
+            <div class="hand-box" style="text-align: center;">
+              <b>Java Package Classes</b>
+            </div>
+            <div class="hand-box" style="text-align: center;">
+              <b>Runtime Libraries</b>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Development Tools Box -->
+      <div class="hand-box" style="width: 28%;">
+        <div style="font-weight: bold; text-decoration: underline;">Development Tools</div>
+        - <code>java</code><br>
+        - <code>javac</code><br>
+        - <code>javadoc</code><br>
+        - <code>javaw</code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 5 (8/06/2026) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 5</div>
+  <div class="date-badge" style="top: 38px;">8/06/2026</div>
+
+  <!-- IDE Section -->
+  <div>
+    <span class="indent-2 accent">↑ (Integrated Development Environment)</span><br>
+    → <b><span class="underline">IDE's</span></b> → Generally we will use these IDE's for JAVA Code <b>(Not in Notepad and cmd)</b><br>
+    <div class="indent-1">
+      - <b>eclipse</b> ——→ <b>Enterprise Edition</b> (<span class="underline">using</span>)<br>
+      - <b>sts</b> (Spring Tool Suite)<br>
+      - <b>intellij</b><br>
+      - <b>vs code</b>
+    </div>
+  </div>
+
+  <!-- Structure of JAVA -->
+  <div class="section-title">⇒ Structure of JAVA</div>
+
+  <div class="row">
+    <div style="width: 68%;">
+      <b>1. <span class="underline">Packages</span></b> → Organising Java classes into different folders based on use case.
+    </div>
+    <div class="hand-box" style="width: 28%; font-size: 15.5px;">
+      <b><span class="underline">Programmes</span></b><br>
+      → Database<br>
+      → Logic (Service)<br>
+      → UI
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 6px;">
+    <div style="width: 58%;">
+      <b>2. <span class="underline">Class</span></b> → Every Java file requires a class.<br>
+      <span class="indent-1">→ Class name should be meaningful.</span><br>
+      <span class="indent-1">→ <b>File name = Class name</b></span>
+    </div>
+    <div style="width: 40%;">
+      <div class="code-block">→ public class <span class="underline">Test</span> {
+       =
+  }</div>
+      <div style="margin-top: 2px;">
+        → <span class="circle-highlight">Test</span> (class) → <b><code>Test.java</code></b>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 6px;">
+    <div style="width: 55%;">
+      <b>3. <span class="underline">Variables</span></b><br>
+      <span class="indent-1">→ To store the data.</span>
+    </div>
+    <div style="width: 43%;">
+      <code>int <b>a</b> = 10;</code><br>
+      <span class="indent-1 accent">↳ 'a' is a variable to store 'Integer'</span>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 6px;">
+    <div style="width: 50%;">
+      <b>4. <span class="underline">Methods</span></b><br>
+      <span class="indent-1">→ Reusable code.</span>
+    </div>
+    <div style="width: 48%;">
+      <div class="code-block">→ public void sum() {
+       =
+  }</div>
+      <div class="hand-box" style="margin-top: 4px; font-size: 15.5px;">
+        * We can have <b>only one public class</b>.<br>
+        * We can have <b>only one main method</b>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Eclipse Setup & Navigation -->
+  <div style="margin-top: 12px;">
+    * <b><span class="underline">Eclipse</span></b> → <b>Eclipse IDE for Enterprise Java and Web Developers</b> → Install<br>
+    <div class="indent-1" style="margin-top: 4px;">
+      <b>Open → New → JAVA PROJECT</b><br>
+      <span class="indent-2">↳ (If not visible) <b>Other → JAVA PROJECT → <code>MyFirstJavaProject</code></b></span><br>
+      <span class="indent-3">↳ <b>JRE</b> (<code>JavaSE-21</code>) → (Leave default)</span><br>
+      <span class="indent-3">↳ <b>Uncheck</b> (<code>module-info.java</code>)</span><br>
+      <span class="indent-1">↳ <b>Window → Show View → Project Explorer</b></span>
+    </div>
+
+    <div style="margin-top: 6px;">
+      <b><span class="underline">Package</span>:</b><br>
+      <span class="indent-1">↳ Right-click on <code>src</code> (Source) folder → <b>New → Package</b></span><br>
+      <span class="indent-1">↳ Can create packages in packages (<b>Nested Packages</b>)</span>
+    </div>
+
+    <div style="margin-top: 6px;">
+      <b><span class="underline">Class</span>:</b><br>
+      <span class="indent-1">→ Right-click on Package and <b>"New Class"</b></span><br>
+      <span class="indent-1">→ Can create class without package under <code>"src"</code> file <i>(will create that in <b>default package</b>)</i></span>
+    </div>
+
+    <div style="margin-top: 6px;">
+      * <b>Package definition should be the <u>first line</u> of class:</b><br>
+      <span class="indent-1"><b><span class="underline">Syntax</span>:</b> &nbsp; <code>package com.flm;</code> ← <i>(package name)</i></span><br>
+      <span class="indent-2"><code>package com.&lt;package_name&gt;;</code></span>
+    </div>
+  </div>
+
+  <!-- Bottom Margin Note -->
+  <div class="accent" style="margin-top: 14px; font-weight: bold;">
+    * We can compile code without JVM.
+  </div>
+</div>
+
+<!-- ==================== PAGE 6 (09/06/2026) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 6</div>
+  <div class="date-badge" style="top: 38px;">09/06/2026</div>
+
+  <!-- Eclipse Shortcuts & Running -->
+  <div class="row">
+    <div style="width: 62%;">
+      <b>For main method in Eclipse:</b><br>
+      <span class="underline"><b>Main method</b></span> → <code>"main"</code> + <code>Ctrl + Space</code><br>
+      <span class="underline"><b>Print stmt</b></span> → <code>"syso"</code> + <code>Ctrl + Space</code>
+    </div>
+    <div class="hand-box" style="width: 36%; font-size: 15.5px;">
+      → <b>To check:</b> (<b>Help → Show Active Keybindings</b>)<br>
+      <span class="indent-1">↳ <b>Content Assist</b> (<code>Ctrl + Space</code>)</span>
+    </div>
+  </div>
+
+  <div style="margin-top: 8px;">
+    * You can <b>"Run"</b> directly in IDE → It will do <b>Compile &amp; Run</b>.<br>
+    * <span class="underline"><b>To Run</b></span>: Right-click in class file → <b>Run As → Java Application</b><br>
+    <span class="indent-3"><i>(or use icon on top <b>"[ ▶ ]"</b>)</i></span>
+  </div>
+
+  <div style="margin-top: 6px;">
+    <b>1 Project</b> → Should have at least <b>1 main method</b>.<br>
+    <span class="indent-1">↳ May have <b>Many classes</b> → And <b>"Run"</b> should be done from that main class only.</span>
+  </div>
+
+  <div style="margin-top: 8px;">
+    • If we are using classes in the <b>same package</b>, no need to import the class.<br>
+    • If using in <b>other package</b>, we need to <b>import</b> the class.<br>
+    <div class="indent-1">
+      <b><span class="underline">Syntax</span>:</b><br>
+      <code>import &lt;package&gt;.&lt;class&gt;;</code> → To import <b>one class</b> in a package.<br>
+      <code>import &lt;package&gt;.*;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ To import <b>whole package</b>.
+    </div>
+  </div>
+
+  <!-- Naming Conventions -->
+  <div class="section-title">⇒ Naming Conventions</div>
+
+  <!-- 1. Package Names -->
+  <div>
+    <b><span class="underline">Package Names</span> → <span class="underline">lower case</span></b> &nbsp; <code>&lt;package_one&gt;</code> ⇒ <code>flm</code> (✔) &nbsp; | &nbsp; <code>Flm</code> (✘)<br>
+    <div class="row">
+      <div class="indent-1" style="width: 68%;">
+        → Can use numbers: <code>package1</code> (✔)<br>
+        → Should <b>not</b> start with numbers: <code>1package</code> (✘)<br>
+        → Special characters allowed: <b><code>( _ &nbsp; $ )</code></b><br>
+        → <b>No space</b> <i>(space is also a special character)</i><br>
+        → Should <b>not</b> start with special character<br>
+        → Can use <b><code>.</code> (dot)</b> → for <b>nested packages</b>
+      </div>
+      <div class="hand-box" style="width: 28%; font-size: 15.5px;">
+        <code><b>flm.com.net</b></code><br>
+        ↳ <code>flm</code><br>
+        &nbsp;&nbsp;&nbsp;↳ <code>com</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↳ <code>net</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Class Names -->
+  <div style="margin-top: 8px;">
+    <b><span class="underline">Class Names</span> → <span class="underline">PascalCase</span></b> → Every word starts with a <b>Capital Letter</b>.<br>
+    <div class="indent-1">
+      <i>Examples:</i> &nbsp; <code>class <b>F</b>ront<b>L</b>ines<b>M</b>edia</code> &nbsp; | &nbsp; <code>class <b>S</b>andeep</code><br>
+      → Can use numbers<br>
+      → Special characters allowed: <b><code>( _ &nbsp; $ )</code></b><br>
+      → Should <b>not</b> start with numbers<br>
+      → <b>No space</b>
+    </div>
+  </div>
+
+  <!-- 3. Variable Names -->
+  <div style="margin-top: 8px;">
+    <b><span class="underline">Variable Names</span> → <span class="underline">camelCase</span></b> → First word starts with <b>small case</b>, rest of the words start with <b>Capital Case</b>.<br>
+    <div class="indent-1">
+      <i>Examples:</i> &nbsp; <code>chennai<b>S</b>uper<b>K</b>ings</code> &nbsp; | &nbsp; <code>camel<b>C</b>ase</code> &nbsp; | &nbsp; <code>sun<b>R</b>isers<b>H</b>yderabad</code><br>
+      → Numbers allowed<br>
+      → Special characters allowed: <b><code>( _ &nbsp; $ )</code></b><br>
+      → <b>No space</b><br>
+      → Can't start with a number<br>
+      → Can start with allowed special character (<code>_</code> or <code>$</code>)
+    </div>
+  </div>
+
+  <!-- 4. Method Names -->
+  <div style="margin-top: 8px;">
+    <b><span class="underline">Method Names</span> → <span class="underline">camelCase</span></b><br>
+    <div class="indent-1">
+      <i>Examples:</i> &nbsp; <code>get<b>S</b>um</code> &nbsp; | &nbsp; <code>calculate<b>A</b>verage</code><br>
+      → Numbers allowed &nbsp; | &nbsp; Special char <b><code>( _ &nbsp; $ )</code></b> &nbsp; | &nbsp; <b>No space</b>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 7 (10/06/2026) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 7</div>
+
+  <!-- Project Name -->
+  <div>
+    <b><span class="underline">Project Name</span>:</b><br>
+    <span class="indent-1">↳ Preferred way → <b>small letters</b> <i>(Not mandatory; some projects use <span class="underline">PascalCase</span>)</i></span><br>
+    <span class="indent-2"><i>Examples:</i> &nbsp; <code>user-management</code> &nbsp; | &nbsp; <code>UserManagement</code></span>
+  </div>
+
+  <!-- Date 10/06/2026 & Data Types -->
+  <div style="position: relative; margin-top: 10px;">
+    <div class="date-badge" style="left: -76px; top: 4px;">10/06/2026</div>
+
+    <div class="row">
+      <div style="width: 68%;">
+        <div class="section-title" style="margin-top: 0;">⇒ Data Types</div>
+        <span class="indent-1">↳ To define the <b>type of data</b> being stored in a variable.</span><br>
+        <b><span class="underline">Types of Data Types</span> - '2'</b><br>
+        <span class="indent-1"><b>⇒ 1. <span class="underline">Primitive Data Types</span> - '8'</b></span>
+      </div>
+
+      <!-- Range Formula Box -->
+      <div class="hand-box" style="width: 30%; font-size: 15.5px; text-align: center;">
+        <b><span class="underline">Range Formula</span></b><br>
+        <b>-2<sup>(No. of bits - 1)</sup> &nbsp; to &nbsp; 2<sup>(No. of bits - 1)</sup> - 1</b><br>
+        <span class="circle-highlight">1 byte = 8 bits</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left Margin Note + Integer Types Table -->
+  <div class="row" style="margin-top: 8px;">
+    <!-- Left Margin Notes & Default Values -->
+    <div style="width: 38%;">
+      <div class="hand-box" style="font-size: 14.5px; margin-bottom: 8px;">
+        Based on requirement, use integer type → use smallest memory possible.<br>
+        <i>(For ex: <b>age</b> → max in general is <code>byte</code> / <code>short</code>)</i>
+      </div>
+
+      <div>
+        <b>Default Value</b> ↓<br>
+        <b>0 ←</b>
+        <span style="display: inline-block; vertical-align: middle; border-left: 2px solid #333; padding-left: 8px;">
+          <b>a) <code>int</code></b><br>
+          <b>b) <code>byte</code></b><br>
+          <b>c) <code>short</code></b><br>
+          <b>d) <code>long</code></b>
+        </span>
+        <b>→ Integer</b>
+      </div>
+
+      <div class="code-block" style="margin-top: 8px; font-size: 15.5px;">
+<br></div>
+    </div>
+
+    <!-- Right Side Memory & Range Matrix -->
+    <div style="width: 60%;">
+      <table class="hand-table">
+        <tbody><tr>
+          <th></th>
+          <th><code>byte</code></th>
+          <th><code>short</code> ↑</th>
+          <th><code>int</code> ↑</th>
+          <th><code>long</code></th>
+        </tr>
+        <tr>
+          <td><b>Memory →</b></td>
+          <td><b>1 byte</b> (8 bits)</td>
+          <td><b>2 bytes</b> (16 bits)</td>
+          <td><b>4 bytes</b> (32 bits)</td>
+          <td><b>8 bytes</b> (64 bits)</td>
+        </tr>
+        <tr>
+          <td><b>Range →</b></td>
+          <td>(-2<sup>7</sup> to 2<sup>7</sup>-1)<br><b>-128 to 127</b></td>
+          <td>(-2<sup>15</sup> to 2<sup>15</sup>-1)<br><b>-32768 to 32767</b></td>
+          <td><b>-2<sup>31</sup> to 2<sup>31</sup>-1</b></td>
+          <td><b>-2<sup>63</sup> to 2<sup>63</sup>-1</b></td>
+        </tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- e, f, g, h Primitive Types -->
+  <div style="margin-top: 10px;">
+    • <b><code>0.0</code> ← e) <code>float</code></b> &nbsp;&nbsp;} <b>Decimal</b> → <b>4 bytes</b> → <b>(7–8) digits precision</b><br>
+    • <b><code>0.0</code> ← f) <code>double</code></b> } <b>Decimal</b> → <b>8 bytes</b> → <b>16 digits precision</b> <i>(No. of values after decimal point)</i><br>
+    • <b><code>empty char</code> ← g) <code>char</code></b> → Characters (Numbers, Alphabet, Special characters)<br>
+    <span class="indent-2">↳ Can store only <b>Single Character</b> &nbsp; | &nbsp; ↳ <b>2 bytes</b></span><br>
+    <div class="row" style="align-items: center;">
+      <div style="width: 64%;">
+        • <b><code>false</code> ← h) <code>boolean</code></b> → <b>1 bit</b> → <b><code>true / false</code></b><br>
+        <span class="accent">↑ <b>Default Values:</b> JVM will assign default values if value was not assigned to variable.</span>
+      </div>
+      <div class="hand-box" style="width: 34%; font-size: 14.5px;">
+        Some programming languages will accept <code>'0'</code> or <code>'1'</code>, but <b>Java will not allow</b>.
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Non-Primitive Data Types -->
+  <div class="section-title" style="margin-top: 10px;"><div class="code-block" style="color: rgb(22, 50, 92); margin: 8px 0px 0px; font-weight: 400; font-size: 15.5px;">int a = 10;
+char A = 'c';
+boolean b = false;</div><div class="accent" style="color: rgb(122, 32, 33); font-family: Kalam, cursive; font-weight: 400; font-size: 14.5px; line-height: 20px; margin-top: 4px;">(<code>float</code> will round off if range is high)</div><div class="accent" style="color: rgb(122, 32, 33); font-family: Kalam, cursive; font-weight: 400; font-size: 14.5px; line-height: 20px; margin-top: 4px;"><br></div></div><div class="section-title" style="margin-top: 10px;">⇒ 2. Non-Primitive Data Types / User-Defined Classes</div>
+  <div class="indent-1">
+    ↳ Non-primitive data types are mostly <b>Classes</b>.<br>
+    ↳ Java / JRE Predefined classes and some are User-Defined.<br>
+    ↳ As class names are in <b>PascalCase</b>, Non-primitive data types keywords will be in same: <b>(<code>String</code>, <code>Array</code>)</b>
+  </div>
+
+  <div style="margin-top: 6px;">
+    <b><span class="underline">String</span> → Group of characters</b><br>
+    <div class="code-block indent-1">String str  = "SANDEEP";
+String code = "123";</div>
+    <b><span class="underline">Array</span></b>
+  </div>
+</div>
+
+<!-- ==================== PAGE 8 (Code Examples & Assignment) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 8</div>
+
+  <div class="section-title">Primitive Data Types - Code Examples &amp; Rules</div>
+
+  <div style="margin-top: 14px;">
+    <div class="code-block">byte  a = 10;
+short b = 32767;
+int   c = 3276888;</div>
+
+    <div class="row" style="align-items: center; margin-top: 4px;">
+      <div class="code-block" style="width: 38%;">long  d = 22248000780L;</div>
+      <div style="width: 60%;">
+        → Can use <b><code>L / l</code></b>, but <b>mandatory</b>; otherwise it will consider range of <b><code>'int'</code></b>.
+      </div>
+    </div>
+
+    <div class="row" style="align-items: center; margin-top: 8px;">
+      <div class="code-block" style="width: 38%;">float e = 1.123F;</div>
+      <div style="width: 60%;">
+        → Can use <b><code>'f'</code></b> at the end, but <b><code>F / f</code> is mandatory</b>.
+      </div>
+    </div>
+
+    <div class="row" style="align-items: center; margin-top: 8px;">
+      <div class="code-block" style="width: 38%;">double f = 1.1234567;</div>
+      <div style="width: 60%;">
+        → Can use <b><code>'d'</code></b> at the end, <b>not mandatory</b>.
+      </div>
+    </div>
+
+    <div class="code-block" style="margin-top: 8px;">char  g = 'A';</div>
+  </div>
+
+  <!-- Assignment Section -->
+  <div class="section-title" style="margin-top: 32px;">⇒ Assignment</div>
+  <div class="hand-box" style="margin-top: 10px; padding: 16px 24px;">
+    • Create a <b>Java Project</b><br>
+    • Create a <b>Java Class</b> in a <b>Package</b><br>
+    • Create <b>8 different variables</b> with <b>8 primitive datatypes</b><br>
+    <span class="indent-2 accent">↳ Meaningful variables with datatypes</span><br>
+    • Assign <b>8 values</b><br>
+    • Follow <b>Naming Convention</b>.
+  </div>
+</div>
+<!-- ==================== PAGE 9 (11/06/2026 - Operators) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 9</div>
+  <div class="date-badge" style="top: 38px;">11/06/2026</div>
+
+  <div class="row">
+    <div style="width: 12%; font-size: 15px; text-align: center; margin-top: 50px;" class="accent">
+      ← 9. shorthand operator<br>
+      (in string topic newly revised string)
+    </div>
+    
+    <div style="width: 53%;">
+      <span class="section-title" style="margin-top: 0;">⇒ Operator</span> → To perform an action.<br>
+      <div class="indent-1">
+        1. <b>Arithmetic operations</b> (<code>+ - * / %</code>)<br>
+        2. <b>Relational operators</b> (<code>&gt;, &lt;, &gt;=, &lt;=, ==, !=</code>)<br>
+        3. <b>Assignment operators</b> (<code>=</code>)<br>
+        4. <b>Unary operators</b> (<code>+ - ++ -- !</code>)<br>
+        5. <b>Logical operators</b> (<code>&amp;&amp;, ||, !</code>)<br>
+        6. <b>Ternary operator</b> (<code>&lt;condition&gt; ? &lt;true statement&gt; : &lt;false statement&gt;</code>)<br>
+        7. <b>Bitwise operators</b><br>
+        8. <b>Shift operators</b>
+      </div>
+    </div>
+
+    <div class="hand-box" style="width: 31%; font-size: 14.5px;">
+      <code>a + b</code><br>
+      → <code>a</code> = operand 1<br>
+      → <code>+</code> = operator<br>
+      → <code>b</code> = operand 2<br>
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      <code>/</code> → quotient<br>
+      <code>%</code> (modulo) → remainder<br>
+      <code>/</code> → absolute division for decimals.<br>
+      <code>%</code> → will work same as integers for (decimals).
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 6px;">
+    <div style="width: 55%;">
+      <div class="code-block">a = "FLM" + b = "Edutech"
+a + b = FLMEdutech
+a + " " + b = FLM Edutech</div>
+      <div style="margin-top: 6px;">
+        <code>5.0 / 2.0 = 2.5</code><br>
+        <code>5.0 % 2.0 = 1.0</code><br>
+        <code>5 / 2 = 2</code><br>
+        <code>5 % 2 = 1</code>
+      </div>
+    </div>
+    <div class="hand-box" style="width: 42%; font-size: 15px;">
+      <b>If string is involved it will considers also second operand as String.</b><br>
+      <code>Syso ("a"+10) -&gt; a10</code><br>
+      <code>"a" + a + a -&gt; a1010</code> &nbsp; <span class="circle-highlight">a=10</span><br>
+      <code>10 + 20 + "a" + 10 + 15 -&gt; 30a1015</code><br>
+      <code>"a" + "b" =&gt; ab</code><br>
+      <code>("a+b" + a+b) -&gt; a+b1015</code><br>
+      <code>("a+b" + (a+b)) -&gt; a+b 25</code>
+    </div>
+  </div>
+
+  <div style="margin-top: 6px;">
+    <code>10 + 10.5 → 20.5</code>
+  </div>
+
+  <!-- String Concatenation & Precedence -->
+  <div class="row" style="margin-top: 12px;">
+    <div style="width: 33%;">
+      <b><u>Assignment oper</u></b><br>
+      ↳ Declare<br>
+      <span class="indent-1">2 int val, 2 float val</span><br>
+      <span class="indent-1">try all arth oper</span><br>
+      <span class="indent-1">int, float, string combine</span>
+    </div>
+    <div style="width: 32%;">
+      <b>Adding Strings</b><br>
+      <span class="indent-1">↳ <b><span class="underline">String</span> Concatenation</b></span>
+    </div>
+    <div class="hand-box" style="width: 31%; font-size: 15px;">
+      <code>a=20</code><br>
+      <code>Syso ("a"); -&gt; a</code><br>
+      <code>Syso (a); -&gt; 20</code><br>
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      <code>// -&gt; single line com</code><br>
+      <code>/* */ -&gt; multi line comment</code>
+    </div>
+  </div>
+
+  <div class="row" style="margin-top: 12px;">
+    <div style="width: 35%; margin-top: 15px;">
+      <b>Java →</b><br>
+      <div class="indent-1">
+        <b><code>( *, /, % )</code> ←</b> Same level (follow left to right)<br>
+        <b><code>( +, - )</code> ←</b> Same level
+      </div>
+    </div>
+    <div style="width: 60%;">
+      <b><span class="underline">Precedence of Arithmetic operations</span></b><br>
+      <span class="indent-1"><b>BODMAS</b></span><br>
+      <span class="indent-1">Bracket of Division Multiplication Addition Substraction</span><br>
+      <span class="indent-1">Left to Right for same precedence</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 10 (12/06/2026 & 15/06/2026) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 10</div>
+  <div class="date-badge" style="top: 38px;">12/06/2026</div>
+
+  <div>
+    <b>→ Unicode →</b> &nbsp; <code>'A' - 65</code> &nbsp; | &nbsp; <code>'B' - 66</code> &nbsp;&nbsp;&nbsp; <i>(→ this is why <code>'a' + 1 → 98</code>)</i><br>
+    <span class="indent-1">→ Will discuss in later class.</span>
+  </div>
+
+  <div class="row" style="margin-top: 6px;">
+    <div style="width: 55%;">
+      <b>→ <u>RO</u></b><br>
+      <code>(10 &gt; 5) -&gt; true</code><br>
+      <code>(10 &lt; 5) -&gt; false</code><br>
+      <code>(10 &lt; 6) -&gt; false</code><br>
+      <span class="indent-2 accent">↳ Relational oper gives o/p in boolean values</span>
+    </div>
+    <div class="hand-box" style="width: 42%; font-size: 15px;">
+      <code>&gt; -&gt; greater than</code><br>
+      <code>&lt; -&gt; less than</code><br>
+      <code>&gt;= -&gt; greater than or equal to</code><br>
+      <code>&lt;= -&gt; less than or equal to</code><br>
+      <code>== -&gt; equal to</code><br>
+      <code>!= -&gt; not equal to</code>
+    </div>
+  </div>
+
+  <div style="margin-top: 8px;">
+    <b>→ <u>UO</u> → operation is performed on single operand.</b><br>
+    <span class="indent-1"><code>+</code>, <code>-</code> → } Sign operators <code>+16, -10</code> → to tell sign of a variable.</span><br>
+    <span class="indent-1"><code>++</code> → increment → <code>10++ → 11</code></span><br>
+    <span class="indent-1"><code>--</code> → decrement → <code>10-- → 9</code></span><br>
+    <span class="indent-1"><code>!</code> → not operator → <code>! true = false</code>, <code>! false = true</code></span><br>
+    <span class="indent-3">↳ Just reverse the boolean value.</span>
+  </div>
+
+  <!-- Increment / Decrement Traces (CORRECTED) -->
+  <div class="row" style="margin-top: 10px;">
+    <div style="width: 52%; font-size: 14.5px;">
+      <div class="hand-box" style="display: inline-block; padding: 4px 8px; margin-bottom: 6px;">
+        <b>Post increment</b><br>
+        <code>a=10 -&gt; d = a++</code><br>
+        <code>d=10, a=11</code><br>
+        <code>(d=a; a=a+1)</code>
+      </div>
+      <div class="hand-box" style="display: inline-block; padding: 4px 8px; margin-bottom: 6px; margin-left: 10px;">
+        <b>Pre increment</b><br>
+        <code>d = ++a</code><br>
+        <code>d=11, a=11</code><br>
+        <code>(a=a+1; d=a)</code>
+      </div>
+
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      
+      <code>b = 10</code><br>
+      <code>sum = ++b + b++ = ++10 + 10++ = 11 + 11 = 22</code><br>
+      <code>a++ + ++a = 10++ + ++11 = 10 + 12 = 22</code><br>
+      <code>sum = a++ + a++ = 10++ + 11++ = 10 + 11 = 21</code>
+    </div>
+    
+    <div class="hand-box" style="width: 45%; font-size: 14.5px;">
+      <code>a=10, b=11</code><br>
+      <code>int sum = ++a + ++b = ++10 + ++11 = 11 + 12 = 23</code><br>
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      <code>sum = a++ + b++ = 10++ + 11++ = 10 + 11 = 21</code> &nbsp; <span class="circle-highlight">Post increment</span><br>
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      <b>Similarly:</b><br>
+      Post decrement: <code>d = a-- -&gt; d=a (a=a-1)</code><br>
+      Pre decrement: <code>d = --a -&gt; d=(a-1) (a=a-1)</code>
+    </div>
+  </div>
+  
+  <!-- Increment / Decrement Traces (Detailed Breakdown) -->
+  <div class="row" style="margin-top: 10px; font-size: 15px;">
+    
+    <!-- Block 1: Complex sum with 'b' -->
+    <div class="code-block" style="width: 30%;">
+b = 10
+Sum = ++b + ++b +
+      b++ + b++ ;
+    = ++10 + ++10 +
+      10++ + 10++
+    = 11 + ++11 +
+      11++ + 11++
+    = 11 + 12 + 12++ + 11++
+    = 11 + 12 + 12 + 13++
+    = 11 + 12 + 12 + 13
+    = <span class="circle-highlight" style="padding: 2px 12px;">48</span>
+
+<span class="circle-highlight">b &rarr; 14</span>
+    </div>
+
+    <!-- Block 2: a++ + ++a -->
+    <div class="code-block" style="width: 22%;">
+a++ + ++a
+=> 10++ + ++10
+= 10 + ++11
+=> 10 + 12 = 22
+    </div>
+
+    <!-- Block 3: a++ + a++ -->
+    <div class="code-block" style="width: 22%;">
+Sum = a++ + a++
+    = 10++ + 10++
+    = 10 + 11++
+    = 10 + 11
+
+<span class="circle-highlight" style="padding: 2px 10px;">Sum = 21</span>
+    </div>
+
+    <!-- Block 4: a++ + b++ -->
+    <div class="code-block" style="width: 24%; position: relative;">
+Sum = a++ + b++
+    = 10++ + 11++
+    = 10 + 11
+
+<span class="circle-highlight" style="padding: 2px 10px;">Sum = 21</span>
+<span class="accent" style="position: absolute; right: -10px; top: 30px; font-family: 'Caveat', cursive;">&larr; Post increment</span>
+    </div>
+    
+  </div>
+
+ 
+
+  <div class="date-badge" style="top: 38;">15/06/2026</div>
+  
+  <!-- Logical Operations -->
+  <div class="section-title" style="margin-top: 25px;"><br></div><div class="section-title" style="margin-top: 25px;"><span style="font-size: 18.5px;"></span>⇒ Logical operations → operands are always boolean values</div>
+  <table style="width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 15px; text-align: center;">
+    <tbody><tr style="border-bottom: 1.5px solid #444;">
+      <th style="padding: 2px;">Two operands</th>
+      <th>TT</th><th>TF</th><th>FT</th><th>FF</th>
+      <th><b>Rules:</b></th>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="text-align: left;"><code>&amp;&amp;</code> → logical AND</td>
+      <td>T</td><td>F</td><td>F</td><td>F</td>
+      <td style="text-align: left;">→ should satisfy both</td>
+    </tr>
+    <tr style="border-bottom: 1px solid #ccc;">
+      <td style="text-align: left;"><code>||</code> → logical OR</td>
+      <td>T</td><td>T</td><td>T</td><td>F</td>
+      <td style="text-align: left;">→ any one is fine</td>
+    </tr>
+    <tr>
+      <td style="text-align: left;"><code>!</code> → logical Not</td>
+      <td colspan="4"><code>! true = false</code>, &nbsp; <code>! false = true</code></td>
+      <td style="text-align: left;"></td>
+    </tr>
+  </tbody></table>
+
+  <div style="margin-top: 8px; font-size: 15px;">
+    <code>a1 = true, a2 = false</code><br>
+    <code>* a1 &amp;&amp; a2 = false</code> &nbsp;&nbsp;|&nbsp;&nbsp; <code>* a1 || a2 = true</code><br>
+    <code>* !a1 = false</code> &nbsp;&nbsp;|&nbsp;&nbsp; <code>!a2 = true</code>
+  </div>
+
+  <!-- Short-circuit & Precedence -->
+  <div class="row" style="margin-top: 8px;">
+    <div style="width: 65%;">
+      → <code>true || &lt;...&gt;</code> → Java will skip rest of statements as it will be true only.<br>
+      → <code>false &amp;&amp; &lt;...&gt;</code> → similarly it will be false only.<br><br>
+      <code>c=10, d=20 → (c++ &gt; ++d) &amp;&amp; (++c &gt; ++d)</code><br>
+      <span class="indent-2"><code>(10 &gt; 21) &amp;&amp; (12 &gt; 22)</code></span><br>
+      <span class="indent-2"><code>false &amp;&amp; ...</code> ↓ <b>But as Java skips after (false &amp;&amp;)</b></span><br>
+      <span class="indent-3 accent"><b>→ c = 11, d = 21</b></span>
+    </div>
+    <div class="hand-box" style="width: 25%; text-align: center;">
+      <b>Precedence</b><br>
+      Left to right<br>
+      <b><code>&amp;&amp; &gt; ||</code></b>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 11 (Ternary Operator & Scanner) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 11</div>
+
+  <div class="section-title">→ Ternary operator</div>
+  <div>
+    <code>? :</code><br>
+    <code>&lt;condition&gt; ? &lt;statement if condition is true&gt; : &lt;stmt is false&gt;</code><br>
+    <div class="indent-1" style="margin-top: 4px;">
+      <code>String type = (num % 2 == 0) ? "even" : "odd";</code><br>
+      <span class="indent-1">→ num = 10 → <code>even</code></span><br>
+      <span class="indent-1">→ num = 5 → <code>odd</code></span>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top: 14px;">⇒ Dynamic values</div>
+  <div>
+    <span class="indent-1">↳ To take values from user dynamically we need to scanner class by creating object.</span><br>
+    <b>Syntax to create object:</b><br>
+    <span class="indent-1"><code>className object = new className();</code></span><br>
+    <b>object creation for Scanner class:</b><br>
+    <span class="indent-1"><code>Scanner sc = new Scanner(System.in);</code></span> &nbsp; <span class="circle-highlight">Scanner ↓ Non-primitive data type</span><br>
+    <span class="indent-1">To use Scanner, we need import package/class:</span><br>
+    <span class="indent-2"><code>import java.util.Scanner;</code></span>
+  </div>
+
+  <div style="margin-top: 8px;">
+    <b>To take/read →</b><br>
+    <span class="indent-1">→ <code>int → sc.nextInt();</code></span><br>
+    <span class="indent-1">→ <code>Byte → sc.nextByte();</code></span><br>
+    <span class="indent-1">→ <code>Int → sc.nextInt();</code></span><br>
+    <span class="indent-1">→ <code>Long → sc.nextLong();</code></span><br>
+    <span class="indent-1">→ <code>sc.next(); // to read String/char (but only one word)</code></span><br>
+    <span class="indent-1">→ <code>sc.nextLine(); // to read string (read along with spaces)</code></span><br>
+    <span class="indent-1">→ <code>sc.nextBoolean();</code></span>
+  </div>
+
+  <div style="margin-top: 6px;">
+    <b>examples:</b><br>
+    <div class="code-block indent-1">int num = sc.nextInt();
+String str = sc.next();
+String str2 = sc.nextLine();</div>
+    <span class="indent-2 accent"><b>if input is Java Full stack → o/p → Java (for next) / Java Full stack (for nextLine)</b></span>
+  </div>
+
+  <!-- Problem in Java (Scanner newline issue - CORRECTED) -->
+  <div class="section-title" style="margin-top: 10px;">Problem in Java</div>
+  <div class="row">
+    <div style="width: 58%;">
+      <div class="code-block">System.out.println("Enter a number");
+int num = sc.nextInt();
+System.out.println("Enter name");
+String name = sc.nextLine();
+System.out.println("name: " + name);</div>
+      <div class="accent" style="margin-top: 4px; font-size: 15px;">
+        * Because <code>&lt;Enter&gt;</code> is also a string/special character in Java. When we press enter, it will give string o/p as well.
+      </div>
+      
+      <div style="margin-top: 12px; border-top: 1px solid #444; padding-top: 8px;">
+        <b>To overcome this, we need to put dummy <code>'nextLine()'</code> after reading Int</b>
+        <div class="code-block" style="margin-top: 4px;">int num = sc.nextInt(); // i/p 5 &lt;Enter&gt;
+sc.nextLine();
+S.o.p("Enter name");
+name = sc.nextLine();
+S.o.p("name: " + name);</div>
+      </div>
+    </div>
+    
+    <div class="hand-box" style="width: 38%; font-size: 14.5px;">
+      <b>I/P Without fix:</b><br>
+      Enter a number:<br>
+      <code>5 &lt;Enter&gt;</code><br>
+      Enter name:<br>
+      <code>name: </code> (skipped!)<br>
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      <b>I/P With fix:</b><br>
+      <code>5</code><br>
+      <code>Enter name: Sandeep</code><br>
+      <code>name: Sandeep</code>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 12 (17/06/2026 - Conditional Statements) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 12</div>
+  <div class="date-badge" style="top: 38px;">17/06/2026</div>
+
+  <div>
+    <b>⇒ Assignment:</b><br>
+    <span class="indent-1">i/p → 1-100 from user using nested Ternary o/p, give grades.</span><br>
+    <div class="code-block indent-1" style="margin-top: 6px;">results = marks &gt; 100 ? "Please Enter Valid Marks" :
+          marks &gt; 90 ? "Grade A" :
+          marks &gt; 80 ? "Grade B" : 
+          ...
+          marks &lt; 0 ? "Please Enter valid marks" : "Failed" ;
+
+(or)
+
+marks &lt;= 100 &amp;&amp; marks &gt;= 90 ? "Grade A" :
+...
+marks &gt; 0 &amp;&amp; marks &lt; 35 ? "Failed" : "Enter valid marks" ;</div>
+  </div>
+
+  <div class="section-title" style="margin-top: 14px;">⇒ Conditional statement</div>
+  <div>
+    <b>1, <u>If</u></b><br>
+    <span class="indent-1"><code>if ( condition ) { ... } // will execute only if condition is true</code></span><br>
+    <span class="indent-2">ex: <code>if (num &gt; 0) { System.out.println("Positive number"); }</code></span><br>
+    <span class="indent-2"><code>num = 10 -&gt; Positive number</code> | <code>num = 0 -&gt; No o/p</code> | <code>num = -10 -&gt; No o/p</code></span>
+  </div>
+
+  <div style="margin-top: 8px;">
+    <b>2, <u>if - else</u></b><br>
+    <span class="indent-1"><code>if (condition) { // executes only if condition is true }</code></span><br>
+    <span class="indent-1"><code>else { // executes if condition is false }</code></span>
+  </div>
+
+  <div style="margin-top: 8px;">
+    <b>3, <u>else-if</u></b><br>
+    <div class="row">
+      <div class="code-block" style="width: 45%;">if (condition 1) {
+    ...
+} else if (condition 2) {
+    ...
+} else {
+    ...
+}</div>
+      <div style="width: 50%; position: relative;">
+        <!-- Added missing bubbles -->
+        <div class="circle-highlight" style="position: absolute; left: -40px; top: 10px; font-size: 14px;">only 1 else<br>should be there</div>
+        <div class="circle-highlight" style="position: absolute; left: -40px; top: 70px; font-size: 14px;">can have<br>multiple<br>else if</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Debugging & Rules -->
+  <div class="row" style="margin-top: 20px;">
+    <div style="width: 55%; font-size: 15.5px;">
+      * <code>if -&gt; Yes (only if)</code><br>
+      * <code>if - else -&gt; Yes</code><br>
+      * <code>if - else if - else if - else -&gt; Yes</code><br>
+      * <code>else -&gt; no (only else not possible)</code><br>
+      * <code>else if -&gt; no ( )</code><br>
+      <span class="accent">* <code>if</code> should be followed by <code>else</code> (or <code>else if</code>) without any other statements, otherwise <code>else</code> will have (Issues).</span>
+    </div>
+    
+    <div class="hand-box" style="width: 40%; font-size: 14.5px;">
+      <b><u>Debug :-</u></b><br>
+      * Keep Break points by double-clicking on "number" in code bar.<br>
+      * Debug as Java application → It will start debugging from the break point.<br>
+      * click <b>"Step over"</b> to move to next line.
+    </div>
+  </div>
+
+  <div style="margin-top: 15px;">
+    <b>⇒ Assingnment</b><br>
+    <span class="indent-1">-&gt; Number user i/p -&gt; Print even or odd } use if's</span><br>
+    <span class="indent-1">-&gt; and grading</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 13 (18/06/2026 - Switch Statements) ==================== -->
+<div class="notebook-page" contenteditable="true" spellcheck="false">
+  <div class="page-num">Page 13</div>
+  <div class="date-badge" style="top: 38px;">18/06/2026</div>
+
+  <div>
+    <b>→ Nested - if</b><br>
+    <div class="code-block indent-1">if (condition) {
+    if (condition) {
+        ...
+    }
+}</div>
+  </div>
+
+  <div class="section-title" style="margin-top: 14px;">⇒ Switch Statements</div>
+  <div class="row">
+    <div style="width: 58%;">
+      <div class="code-block">Switch (condition) {
+    case expression 1:
+        statement;
+        break;
+    case expression 2:
+        statement;
+        break;
+    case expression 3:
+        ...
+    default:
+        statement;
+}</div>
+    </div>
+    <div class="hand-box" style="width: 38%; font-size: 14.5px;">
+      ↳ <code>int, char, strings</code> → <b>only Allowed inputs</b><br>
+      <hr style="border: 0; border-top: 1px dashed #666; margin: 4px 0;">
+      * If expression matched, it will execute the <b>'all' cases below</b> that matched case.<br>
+      * so we need to add <b><code>break;</code></b> to avoid above issue.<br>
+      * When no case is matched, it will execute <b>default</b> case.
+    </div>
+  </div>
+
+  <!-- Example: Switch (floor) & Short Form Bubble -->
+  <div style="margin-top: 12px;">
+    <b>Ex:</b><br>
+    <div class="row">
+      <div class="code-block" style="width: 50%;">Switch (floor) {
+    case 1:  Syso ("First floor");  break;
+    case 2:  Syso ("Second floor"); break;
+    case 3:  Syso ("Third floor");  break;
+    default: Syso ("Invalid floor number");
+}</div>
+      <div class="circle-highlight" style="width: 15%; font-size: 13px; text-align: center; margin-top: 20px;">
+        ← Just writing<br>in short form<br>(System.out.println)
+      </div>
+      <div class="hand-box" style="width: 30%; font-size: 14px;">
+        <b>i/o if no break; stmt</b><br>
+        1 → first floor, second floor, third floor, Invalid floor<br>
+        2 → second floor, third floor, Invalid floor<br>
+        3 → third floor, Invalid floor<br>
+        <b>⇒ So we need to use break;</b>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function downloadHTML() {
+  const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  const blob = new Blob([htmlContent], { type: "text/html" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Java_Full_Stack_Notes_Edited.html";
+  a.click();
+}
+</script>
+
+
+</body></html>
