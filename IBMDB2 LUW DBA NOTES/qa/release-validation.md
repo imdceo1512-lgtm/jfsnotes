@@ -5,7 +5,7 @@
 **Build command:** node qa/build_course.mjs
 **Static command:** node qa/validate_course.mjs
 
-**Package state:** Authored and generated in the workspace, statically validated, archived/copied to the requested T: destination. Visual browser review and Db2 lab execution remain outstanding, so this is not production runbook certification.
+**Package state:** Authored, statically validated, archived/copied to the requested T: destination, and pushed to the GitHub feature branch below. Visual browser review and Db2 lab execution remain outstanding, so this is not production runbook certification.
 
 ## Checks
 
@@ -22,7 +22,7 @@
 | Release-sensitive research | Consulted | IBM Db2 12.1 sources listed in reference-validation.md. |
 | Procedure execution | Not performed | No Db2 CLI/server or disposable Db2 lab is installed in the available environment. |
 | T: archive and deployment | Pass | Prior course files archived at `T:\Notes\IBMDB2 LUW DBA NOTES\archives\Db2_LUW_DBA_V3_PreReplacement_2026-10-27.zip` (77 entries); validated package copied to the exact target with 68 Markdown and 68 HTML lesson pages. |
-| GitHub publish | Not performed | The writable workspace checkout has no configured Git remote or commits, and the T: target contains no Git metadata; no authenticated publish path was available in the workspace. |
+| GitHub publish | Pass | Pushed to [`codex/db2-luw-dba-course-12.1`](https://github.com/imdceo1512-lgtm/notes/tree/codex/db2-luw-dba-course-12.1/IBMDB2%20LUW%20DBA%20NOTES); package commit `7ead79e`. `main` was not changed. |
 
 ## Limitations
 

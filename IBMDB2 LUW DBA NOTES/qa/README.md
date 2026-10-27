@@ -9,7 +9,7 @@ This folder contains course-authoring evidence, not learner chapters.
 - Procedure status: every procedure is marked **NOT YET EXECUTED**. This workspace has no Db2 CLI or disposable Db2 server.
 - Review: the authoring agent performed the role-perspective review in [role-review-matrix.md](./role-review-matrix.md). No independent human or IBM SME reviewed this package.
 - Reference research: release-sensitive topics were checked against linked IBM 12.1 documentation; see [reference-validation.md](./reference-validation.md).
-- Static checks: Markdown structure and links, HTML counterparts, and local HTML assets pass; see [release-validation.md](./release-validation.md). The validated package is copied to the requested T: destination; screenshot-based browser inspection and Db2 lab execution remain outstanding.
+- Static checks: Markdown structure and links, HTML counterparts, and local HTML assets pass; see [release-validation.md](./release-validation.md). The package is copied to the requested T: destination and pushed to the listed GitHub branch; screenshot-based browser inspection and Db2 lab execution remain outstanding.
 
 ## Evidence files
 

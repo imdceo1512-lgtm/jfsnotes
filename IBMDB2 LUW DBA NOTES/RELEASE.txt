@@ -1,6 +1,8 @@
 Db2 LUW DBA Course — 12.1 baseline
 Package date: 2026-10-27
-Status: Authored package copied; visual browser review and Db2 lab execution remain outstanding.
+Status: Authored package; static Markdown/HTML link checks passed.
+Destination copy: T:\Notes\IBMDB2 LUW DBA NOTES
+GitHub branch: codex/db2-luw-dba-course-12.1 (package commit 7ead79e)
 Scope: 68 lessons; Linux x86-64, single-member disposable-lab baseline.
 Procedure status: NOT YET EXECUTED for all procedures.
-Static validation: Passed; see qa/release-validation.md.
+Limitations: screenshot-based visual review and Db2 lab execution remain outstanding.

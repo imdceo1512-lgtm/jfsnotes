@@ -2,7 +2,7 @@
 
 A progressive, searchable reference course with 68 lessons from host operations through senior DBA scenarios. Primary examples target Db2 LUW 12.1.0 on Linux x86-64 and a disposable single-member lab. The exact fix pack is intentionally not asserted because no lab server is available. Read the [scope and navigation map](./CURRICULUM_MAP.md), then enter a domain below.
 
-**Build status:** The package passed static Markdown and HTML link checks and is copied to the requested T: destination. Visual browser inspection and Db2 lab execution remain outstanding.
+**Build status:** The package passed static Markdown and HTML link checks, is copied to the requested T: destination, and is pushed to the listed GitHub branch. Visual browser inspection and Db2 lab execution remain outstanding.
 
 **Use boundary:** notes are an original learning resource; they do not replace IBM support guidance, local change approval, recovery drills, or production experience. Every lesson identifies command context, authority, prechecks, expected result, independent check, and an escalation boundary. No password, private key, production identifier, or customer data is used.
 
