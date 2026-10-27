@@ -1,0 +1,10 @@
+# E — Monitoring, diagnostics, and incident evidence
+
+- [E-01 Incident scope, timeline, baseline, and evidence quality](E-01.md) — Use this lesson to make a bounded DBA decision about impact and scope boundary, UTC timeline and clock skew, baseline and comparison window. The key is to identify the failing layer and scope before changing state.
+- [E-02 db2diag.log, notification logs, diagnostic signatures, and FODC](E-02.md) — Use this lesson to make a bounded DBA decision about diagnostic path/rotation/diagsize, db2diag filters and record fields, notification log correlation. The key is to identify the failing layer and scope before changing state.
+- [E-03 db2pd, monitor table functions, and snapshots](E-03.md) — Use this lesson to make a bounded DBA decision about point-in-time db2pd, current MON_GET functions, legacy SNAP_GET monitoring. The key is to identify the failing layer and scope before changing state.
+- [E-04 Connections, applications, agents, transactions, and long-running work](E-04.md) — Use this lesson to make a bounded DBA decision about application handles and client identity, agent/EDU state, UOW start and log usage. The key is to identify the failing layer and scope before changing state.
+- [E-05 Event-monitor families, targets, lifecycle, storage, and interpretation](E-05.md) — Use this lesson to make a bounded DBA decision about database/table/connection/statement/transaction/activity/statistics events, lock/deadlock/threshold/package-cache/change-history families, table/unformatted/file/pipe targets. The key is to identify the failing layer and scope before changing state.
+- [E-06 Db2/OS observability, metric definitions, alerts, and operational reporting](E-06.md) — Use this lesson to make a bounded DBA decision about counter/gauge/rate/histogram definitions, database/member/host dimensions, CPU memory I/O network log space metrics. The key is to identify the failing layer and scope before changing state.
+
+[Course index](../README.md) · [Curriculum map](../CURRICULUM_MAP.md)

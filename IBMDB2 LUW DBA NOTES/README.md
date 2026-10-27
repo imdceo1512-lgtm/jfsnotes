@@ -1,54 +1,35 @@
-# Db2 LUW DBA V3 — Fresh Course
+# Db2 LUW DBA Course — 12.1 baseline
 
-**Release:** 3.0.0
-**Date:** 2026-10-27
-**Primary reference:** IBM Db2 LUW 12.1
+A progressive, searchable reference course with 68 lessons from host operations through senior DBA scenarios. Primary examples target Db2 LUW 12.1.0 on Linux x86-64 and a disposable single-member lab. The exact fix pack is intentionally not asserted because no lab server is available. Read the [scope and navigation map](./CURRICULUM_MAP.md), then enter a domain below.
 
-This is a fresh, self-contained training release for Db2 LUW database administrators. It covers host preparation, Db2 architecture, SQL and storage, access control, diagnosis, backup and recovery, high availability, performance, upgrades, automation, and senior DBA scenarios.
+**Build status:** The package passed static Markdown and HTML link checks and is copied to the requested T: destination. Visual browser inspection and Db2 lab execution remain outstanding.
 
-## Course contents
+**Use boundary:** notes are an original learning resource; they do not replace IBM support guidance, local change approval, recovery drills, or production experience. Every lesson identifies command context, authority, prechecks, expected result, independent check, and an escalation boundary. No password, private key, production identifier, or customer data is used.
 
-- **68 lessons** across phases A–K.
-- **At least three worked examples per lesson** (208 total), with commands, prerequisites, and expected interpretation.
-- **At least three lesson-specific failure cases per lesson**, each with likely cause, corrective action, and verification step.
-- A hands-on lab, answer key, cleanup guidance, review question, and IBM or platform references in every lesson.
-- Inline diagrams in every lesson, including decision flows and architecture maps; the course home includes the course-level architecture.
-- Offline-capable HTML navigation, lesson search, print / Save PDF, and per-lesson HTML download.
+| Domain | Topic | Lessons |
+|---|---|---:|
+| A | [Host, Linux, and operational readiness](./A/README.md) | 5 |
+| B | [Db2 LUW foundations and architecture](./B/README.md) | 6 |
+| C | [SQL, catalogs, objects, storage, and utilities](./C/README.md) | 7 |
+| D | [Security and connectivity](./D/README.md) | 6 |
+| E | [Monitoring, diagnostics, and incident evidence](./E/README.md) | 6 |
+| F | [Logging, backup, restore, and recovery](./F/README.md) | 9 |
+| G | [HA/DR, replication, and topology operations](./G/README.md) | 6 |
+| H | [SQL performance, concurrency, and maintenance](./H/README.md) | 7 |
+| I | [Change, upgrades, migration, and architecture](./I/README.md) | 6 |
+| J | [Automation and operational engineering](./J/README.md) | 6 |
+| K | [Senior DBA scenarios and capstone](./K/README.md) | 4 |
 
-## Browse the course
+## Reference tools
 
-- [Open the course home](index.html) for the searchable phase list and course architecture.
-- [Browse lessons by phase](modules/README.md) in Git folder view.
-- [Open the lesson browser](modules/index.html) when served as a static site.
-- [Read the curriculum map](CURRICULUM_MAP.md).
+- [Curriculum map](./CURRICULUM_MAP.md)
+- [Glossary](./GLOSSARY.md)
+- [Command and SQL index](./COMMAND_INDEX.md)
+- [Troubleshooting index](./TROUBLESHOOTING_INDEX.md)
+- [Lab index](./LAB_INDEX.md)
+- [QA and coverage evidence](./qa/README.md)
+- [Topic Depth Matrix](./qa/topic-depth-matrix.md)
+- [Coverage ledger](./qa/coverage-ledger.md)
+- [HTML reader](./index.html)
 
-Lesson links are relative, so navigation works from the repository root and from the `modules/` directory. The repository browser renders the Markdown directory pages; the HTML course pages render when served by a static-site host such as GitHub Pages.
-
-## Version and environment
-
-Db2 LUW 12.1 is the primary command and documentation baseline. A lesson states Db2 11.5 compatibility only where checked. Linux/UNIX host examples assume Bash and common tools; some optional commands require packages such as `sysstat` or `netcat`. Replace sample database names, schemas, paths, hostnames, user IDs, image names, and timestamps with values from the target lab. A token such as `/db2backup/IMAGE_FILE` is a file-name placeholder, not an existing backup.
-
-Commands were statically reviewed against IBM documentation and the relevant platform manuals. This workspace has no Db2 client/server, so the examples have not been executed against a live Db2 instance. Follow the authority and object prerequisites in each lesson, and rehearse changes in an isolated lab.
-
-## Learning path
-
-- **Phase A — Host, Linux, and operational readiness:** 5 lessons.
-- **Phase B — Db2 LUW foundations and architecture:** 6 lessons.
-- **Phase C — SQL, catalog, objects, storage, and utilities:** 7 lessons.
-- **Phase D — Security and connectivity:** 6 lessons.
-- **Phase E — Monitoring, diagnostics, and incident evidence:** 6 lessons.
-- **Phase F — Logging, backup, restore, and recovery:** 9 lessons.
-- **Phase G — High availability, disaster recovery, and replication:** 6 lessons.
-- **Phase H — SQL performance, concurrency, and maintenance:** 7 lessons.
-- **Phase I — Change, upgrades, migration, and architecture:** 6 lessons.
-- **Phase J — Automation, observability, and operational excellence:** 6 lessons.
-- **Phase K — Senior DBA scenarios and capstone:** 4 lessons.
-
-## Release contents
-
-The course release contains the course home, lesson HTML, curriculum map, and release note. Build source, audit logs, and work-in-progress material are excluded. The prebuilt ZIP is kept locally and ignored by Git.
-
-
-## Git repository files
-
-The repository includes `.gitattributes` for consistent text line endings, `.gitignore` for local/generated files, and `.nojekyll` for static hosting. The prebuilt ZIP remains available locally but is excluded from Git; use the repository host’s archive or release feature when you need a downloadable package.
+GitHub renders Markdown using its own standard interface fonts. The companion HTML stylesheet uses the installed Windows **Ink Free** handwritten-style font for prose and Consolas for commands; if Ink Free is unavailable, it falls back to Comic Sans MS and then a system cursive font.
