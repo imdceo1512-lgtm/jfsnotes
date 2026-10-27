@@ -1,0 +1,13 @@
+# Local release archive; the Git host can create an archive from the repository
+/Db2_LUW_DBA_V3_Release_2026-10-27.zip
+
+# Editor and operating-system noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python build cache if source tooling is added later
+__pycache__/
+*.py[cod]

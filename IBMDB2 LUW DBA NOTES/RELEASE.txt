@@ -1,0 +1,9 @@
+Db2 LUW DBA V3 — Fresh Course
+Release: 3.0.0
+Date: 2026-10-27
+Primary reference: IBM Db2 LUW 12.1
+Lessons: 68
+Worked examples: 208
+
+Distribution: index.html, modules/*.html, README.md, CURRICULUM_MAP.md, RELEASE.txt
+Validation: Python source compilation, lesson/page counts, required-section and local-link checks, and static command review against official references. No Db2 runtime is installed in the build workspace.

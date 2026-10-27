@@ -1,0 +1,9 @@
+# Generated Db2 distribution archive (the Git host can create a repository archive)
+/IBMDB2 LUW DBA NOTES/Db2_LUW_DBA_V3_Release_2026-10-27.zip
+
+# Operating-system and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
