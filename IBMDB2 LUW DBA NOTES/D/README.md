@@ -1,0 +1,10 @@
+# D — Security and connectivity
+
+- [D-01 Authentication, operating-system identity, providers, and security plugins](D-01.md) — Use this lesson to make a bounded DBA decision about server/client authentication settings, OS local identity, LDAP/Kerberos/GSS provider boundary, plugin and case mapping. The key is to identify the failing layer and scope before changing state.
+- [D-02 Authorities, privileges, roles, groups, ownership, and effective access](D-02.md) — Use this lesson to make a bounded DBA decision about SYSADM/SYSCTRL/SYSMAINT/SYSMON boundaries, SECADM/DBADM/DATAACCESS/ACCESSCTRL/SQLADM, database schema and object grants. The key is to identify the failing layer and scope before changing state.
+- [D-03 Client catalogs, aliases, drivers, connection configuration, and reroute](D-03.md) — Use this lesson to make a bounded DBA decision about TCPIP node/database catalog and alias, uncatalog and cache behavior, wrong-target guard. The key is to identify the failing layer and scope before changing state.
+- [D-04 TLS, certificates, keystores, native database encryption, and backup encryption](D-04.md) — Use this lesson to make a bounded DBA decision about TLS server keydb/stash/certificate label/listener, DB2COMM TCPIP and SSL ports/restart, client trust and certificate rotation. The key is to identify the failing layer and scope before changing state.
+- [D-05 Auditing, RCAC, masks, LBAC, and sensitive-data controls](D-05.md) — Use this lesson to make a bounded DBA decision about instance versus database audit logs, SECADM audit policy create/apply/archive/extract, RCAC row permission and column mask activation. The key is to identify the failing layer and scope before changing state.
+- [D-06 Layer-by-layer security and connectivity failure diagnosis](D-06.md) — Use this lesson to make a bounded DBA decision about client config and DNS, network/firewall/listener, TLS certificate trust. The key is to identify the failing layer and scope before changing state.
+
+[Course index](../README.md) · [Curriculum map](../CURRICULUM_MAP.md)

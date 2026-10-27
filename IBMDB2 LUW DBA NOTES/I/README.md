@@ -1,0 +1,10 @@
+# I — Change, upgrades, migration, and architecture
+
+- [I-02 Fix packs, software maintenance, install copies, and topology sequencing](I-02.md) — Use this lesson to make a bounded decision about install copy and instance inventory, fix-pack installation method, online/offline restrictions. Confirm target, authority, state, and recovery boundary before changing anything.
+- [I-03 Db2 upgrade planning, prechecks, execution, application tests, and fallback limits](I-03.md) — Use this lesson to make a bounded decision about source/target compatibility, readiness verification, blocker resolution. Confirm target, authority, state, and recovery boundary before changing anything.
+- [I-04 Cross-platform migration, compatibility, logical movement, and reconciliation](I-04.md) — Use this lesson to make a bounded decision about physical image portability, redirected restore mapping, logical movement tools. Confirm target, authority, state, and recovery boundary before changing anything.
+- [I-05 Federation, wrappers, servers, user mappings, nicknames, and pushdown diagnosis](I-05.md) — Use this lesson to make a bounded decision about wrapper/server/user mapping/nickname, remote credentials and least privilege, pushdown and remote plan. Confirm target, authority, state, and recovery boundary before changing anything.
+- [I-01 Production change design, blast radius, stop criteria, rollback, and acceptance](I-01.md) — Use this lesson to make a bounded decision about change objective and blast radius, precheck and pre/post evidence, canary and measurable acceptance. Confirm target, authority, state, and recovery boundary before changing anything.
+- [I-06 Capacity planning and reference architectures with recovery/failover headroom](I-06.md) — Use this lesson to make a bounded decision about transaction demand and growth assumptions, CPU/memory/storage/network sizing, HA/DR and backup load during failure. Confirm target, authority, state, and recovery boundary before changing anything.
+
+[Course index](../README.md) · [Curriculum map](../CURRICULUM_MAP.md)
