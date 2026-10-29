@@ -4,4 +4,4 @@
 
 ## Contents
 
-- [Java Full Stack - Editable Handwritten Notebook (Pages 1-4)](Core%20Java.html)
+- [Core Java](Core%20Java.html)
